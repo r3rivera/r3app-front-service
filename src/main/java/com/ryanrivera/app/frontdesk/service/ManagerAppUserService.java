@@ -2,6 +2,7 @@ package com.ryanrivera.app.frontdesk.service;
 
 import com.ryanrivera.app.frontdesk.model.CreateUserRequest;
 import com.ryanrivera.app.frontdesk.model.domain.AppUser;
+import com.ryanrivera.app.frontdesk.model.domain.User;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -16,13 +17,26 @@ public class ManagerAppUserService {
 
     public AppUser createAppUser(CreateUserRequest request){
         final UUID id = UUID.randomUUID();
+        mapUser.put(id, request);
+        return transformUser(id, request.getUserInfo());
+    }
 
+    private AppUser transformUser(UUID id, User user){
         final AppUser userResponse = new AppUser();
         userResponse.setAppUserId(id);
-        userResponse.setFirstName(request.getUserInfo().getFirstName());
-        userResponse.setLastName(request.getUserInfo().getLastName());
+        userResponse.setFirstName(user.getFirstName());
+        userResponse.setLastName(user.getLastName());
         return userResponse;
     }
+
+    public AppUser getAppUser(UUID appUserId){
+        if(mapUser.containsKey(appUserId)){
+            final CreateUserRequest user = mapUser.get(appUserId);
+            return transformUser(appUserId,user.getUserInfo());
+        }
+        return null;
+    }
+
 
     public boolean deleteAppUser(UUID appUserId){
         if(mapUser.containsKey(appUserId)){

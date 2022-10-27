@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CreateUserResponse {
+public class UserResponse {
     private AppUser user;
 }

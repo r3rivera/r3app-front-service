@@ -11,9 +11,7 @@ import java.util.Set;
 @Data
 @Builder
 public class CreateUserRequest {
-
     private User userInfo;
     private Address address;
     private Set<ContactInfo> contactInfos;
-
 }
