@@ -22,16 +22,20 @@ public class UserAdminController {
 
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@RequestBody CreateUserRequest userRequest){
+        log.info("Creating a new user...");
         final AppUser appUser = appUserService.createAppUser(userRequest);
         if(appUser.getAppUserId() == null){
+            log.error("User not created!");
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
-        UserResponse response = UserResponse.builder().user(appUser).build();
+        final UserResponse response = UserResponse.builder().user(appUser).build();
+        log.info("User created!");
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{appUserId}")
     public ResponseEntity<UserResponse> getUser(@PathVariable("appUserId") UUID appUserId){
+        log.info("Getting user...");
         final AppUser appUser = appUserService.getAppUser(appUserId);
         if(appUser == null || appUser.getAppUserId() == null){
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -42,6 +46,7 @@ public class UserAdminController {
 
     @DeleteMapping("/{appUserId}")
     public ResponseEntity<Boolean> deleteUser(@PathVariable("appUserId") UUID appUserId){
+        log.info("Deleting user...");
         final boolean isDeleted = appUserService.deleteAppUser(appUserId);
         return ResponseEntity.ok(isDeleted);
     }
